@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Packliste – Ab geht die Lutzi!</title>
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html { background: #14161b; }
+  body {
+    margin: 0;
+    background: #14161b;
+    color: #d4d8df;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "DejaVu Sans", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 480px; margin: 0 auto; padding: 26px 16px calc(40px + env(safe-area-inset-bottom)); }
+
+  /* Header */
+  .kicker {
+    font-size: 11px; letter-spacing: 1.6px; text-transform: uppercase;
+    color: #ffb454; font-weight: 700; margin: 0 0 7px;
+  }
+  h1 {
+    font-size: 28px; line-height: 1.08; font-weight: 800;
+    color: #f4f6f9; margin: 0 0 8px; letter-spacing: -0.4px;
+  }
+  .meta { font-size: 13px; color: #949aa6; margin: 0; }
+  .hint {
+    display: inline-flex; align-items: center; gap: 6px;
+    margin-top: 14px; font-size: 12px; color: #868c98;
+    border: 1px solid #262a33; border-radius: 999px; padding: 5px 11px;
+  }
+  .hint b { color: #ffb454; font-weight: 700; }
+
+  /* Callouts */
+  .alert { border-radius: 14px; padding: 13px 15px; margin: 16px 0 0; font-size: 14px; line-height: 1.5; }
+  .alert .lbl { display: block; font-weight: 800; letter-spacing: 0.5px; font-size: 11px; text-transform: uppercase; margin: 0 0 4px; }
+  .alert.heat { background: #241d12; border: 1px solid #3a2e18; color: #ecdcc6; }
+  .alert.heat .lbl { color: #ffb454; }
+  .alert.food { background: #122029; border: 1px solid #1d3742; color: #cfe6ee; }
+  .alert.food .lbl { color: #6cc4d8; }
+  .alert strong { color: #ffffff; font-weight: 700; }
+
+  /* Section cards */
+  .card { background: #1b1e24; border: 1px solid #262a33; border-radius: 14px; padding: 13px 16px 9px; margin: 12px 0 0; }
+  .card > h2 {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 12.5px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;
+    color: #e7eaef; margin: 0 0 6px;
+  }
+  .card > h2::before { content: ""; width: 4px; height: 15px; border-radius: 2px; background: #ffb454; flex: 0 0 4px; }
+  .card.danger > h2 { color: #ffd6d6; }
+  .card.danger > h2::before { background: #ff6b6b; }
+
+  /* Check rows */
+  .row { display: flex; align-items: flex-start; gap: 12px; padding: 8px 0; cursor: pointer; }
+  .row + .row { border-top: 1px solid #21252d; }
+  .row input {
+    appearance: none; -webkit-appearance: none;
+    width: 21px; height: 21px; flex: 0 0 21px; margin: 1px 0 0;
+    border: 2px solid #555b68; border-radius: 6px; background: #15181e;
+    position: relative; cursor: pointer; transition: background .12s, border-color .12s;
+  }
+  .row input:checked { background: #ffb454; border-color: #ffb454; }
+  .row input:checked::after {
+    content: ""; position: absolute; left: 6px; top: 2px;
+    width: 5px; height: 10px; border: solid #14161b; border-width: 0 2.5px 2.5px 0; transform: rotate(45deg);
+  }
+  .row input:focus-visible { outline: 2px solid #ffb454; outline-offset: 2px; }
+  .row .tx { flex: 1; font-size: 15px; line-height: 1.45; }
+  .row .tx strong { color: #ffffff; font-weight: 700; }
+  .row input:checked ~ .tx { color: #767c88; text-decoration: line-through; text-decoration-color: #4a4f5a; }
+  .row input:checked ~ .tx strong { color: #767c88; }
+
+  .note { padding: 2px 0 6px 33px; margin-top: -4px; color: #949aa6; font-size: 13px; line-height: 1.4; }
+  .note .arr { color: #ffb454; }
+  .note strong { color: #cfd3da; font-weight: 700; }
+
+  /* Info card */
+  .info-row { display: flex; gap: 10px; padding: 7px 0; font-size: 14px; line-height: 1.45; }
+  .info-row + .info-row { border-top: 1px solid #21252d; }
+  .info-row::before { content: "•"; color: #ffb454; font-weight: 700; flex: 0 0 auto; }
+  .info-row strong { color: #f0f2f5; font-weight: 700; }
+
+  footer { text-align: center; color: #ffcf8a; font-weight: 700; font-size: 14px; margin: 22px 6px 0; line-height: 1.4; }
+
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+  <div class="wrap">
+
+    <header>
+      <div class="kicker">Packliste &middot; JGA-Wochenende</div>
+      <h1>Ab geht die Lutzi!</h1>
+      <p class="meta">Rottershausen (bei Schweinfurt) &middot; 25.&ndash;27. Juni 2026</p>
+      <span class="hint"><b>&#10003;</b> Tippen zum Abhaken</span>
+    </header>
+
+    <div class="alert heat">
+      <span class="lbl">&#9728; Hitze am Wochenende</span>
+      Bis zu <strong>40&nbsp;&deg;C</strong> und kaum Regen. Viel trinken, eincremen, tagsüber Schatten suchen (Pavillon). Nachts mild (~18&ndash;20&nbsp;&deg;C) &ndash; dicke Klamotten kaum nötig.
+    </div>
+
+    <div class="alert food">
+      <span class="lbl">Samstag-Essen</span>
+      Mittag- &amp; Abendessen organisiert <strong>jede/r selbst</strong> (Frühstück ist gestellt). Foodtrucks &amp; Streetfood gibt&rsquo;s vor Ort.
+    </div>
+
+    <div class="card danger">
+      <h2>Bitte NICHT mitbringen</h2>
+      <label class="row"><input type="checkbox"><span class="tx"><strong>Glas</strong> in jeglicher Form (Flaschen, Gläser) &rarr; alles in <strong>Dosen/Plastik</strong> umfüllen</span></label>
+      <label class="row"><input type="checkbox"><span class="tx"><strong>Gasbehälter über 500&nbsp;g</strong> &ndash; nur kleine Kartuschen (&le;&nbsp;500&nbsp;g)</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Trockeneis, Benzin/Brandbeschleuniger, Waffen, Pyro</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Eigene Getränke &amp; Speisen aufs <strong>Festivalgelände</strong> (nur am Camping erlaubt!)</span></label>
+      <div class="note"><span class="arr">&rarr;</span> fürs Gelände nur <strong>eine leere, faltbare Flasche bis 1&nbsp;L</strong></div>
+    </div>
+
+    <div class="card">
+      <h2>Hitze-Essentials</h2>
+      <label class="row"><input type="checkbox"><span class="tx">Sonnencreme <strong>LSF&nbsp;50+</strong> + Lippenpflege mit LSF</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Kopfbedeckung (Hut/Cap) + Sonnenbrille</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Trinkflasche <strong>+ leere faltbare Flasche (&le;&nbsp;1&nbsp;L)</strong> fürs Gelände</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Kühlhandtuch / kleiner Handventilator (optional, aber Gold wert)</span></label>
+    </div>
+
+    <div class="card">
+      <h2>Schlafen &amp; Camping</h2>
+      <label class="row"><input type="checkbox"><span class="tx">Schlafsack <strong>leicht</strong> oder dünne Decke (Nächte ~18&ndash;20&nbsp;&deg;C)</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Isomatte / Luftmatratze (+ Pumpe)</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Kissen</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Stirnlampe / Taschenlampe + Ersatzbatterien</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Ohrstöpsel + Schlafmaske (Sonne früh, Musik spät)</span></label>
+    </div>
+
+    <div class="card">
+      <h2>Klamotten &ndash; leicht &amp; luftig</h2>
+      <label class="row"><input type="checkbox"><span class="tx">Luftige T-Shirts / Tops + kurze Hosen</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">1 leichtes Langarm-Shirt (Sonnenschutz / kühlere Abende)</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">1 dünne Jacke oder Hoodie für nachts</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Badesachen</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Bequeme, <strong>eingelaufene</strong> Schuhe + Flip-Flops/Sandalen</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Genug Socken &amp; Unterwäsche</span></label>
+    </div>
+
+    <div class="card">
+      <h2>Hygiene &amp; Gesundheit</h2>
+      <label class="row"><input type="checkbox"><span class="tx"><strong>Eigenes Klopapier</strong> + Feuchttücher + Handdesinfektion</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Handtuch, Duschgel, Zahnbürste + Zahnpasta, Deo</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Trockenshampoo</span></label>
+      <label class="row"><input type="checkbox"><span class="tx"><strong>Persönliche Medikamente</strong> (+ etwas Reserve)</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Schmerztabletten, Pflaster, <strong>Blasenpflaster</strong></span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Antihistaminikum (Mücken/Heuschnupfen), After Sun, Mückenspray</span></label>
+    </div>
+
+    <div class="card">
+      <h2>Eigenes Essgeschirr</h2>
+      <label class="row"><input type="checkbox"><span class="tx">Teller, Becher, Besteck &ndash; <strong>noch unklar, ob jede/r eigenes braucht</strong>. Zur Sicherheit einpacken</span></label>
+    </div>
+
+    <div class="card">
+      <h2>Dokumente, Geld &amp; Technik</h2>
+      <label class="row"><input type="checkbox"><span class="tx"><strong>Ticket</strong> (Handy <strong>+ Ausdruck/Screenshot</strong> als Backup)</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Personalausweis</span></label>
+      <label class="row"><input type="checkbox"><span class="tx"><strong>Bargeld</strong> + EC-/Kreditkarte</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Handy + Ladekabel &ndash; Powerbank optional, <strong>vor Ort leihbar (Flatrate)</strong></span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Kleines Schloss + Bauchtasche/Crossbody</span></label>
+    </div>
+
+    <div class="card">
+      <h2>Gut zu wissen</h2>
+      <div class="info-row"><span><strong>Awareness / Notfall:</strong> Codewort &bdquo;Ist Luisa da?&ldquo; beim Personal nennen.</span></div>
+      <div class="info-row"><span><strong>Anreise:</strong> Bahnhof Rottershausen ~800&nbsp;m, Parken kostenlos direkt am Camping.</span></div>
+      <div class="info-row"><span><strong>Glasverbot ernst nehmen</strong> &ndash; lieber zu Hause umfüllen als am Einlass entsorgen.</span></div>
+    </div>
+
+    <footer>Auf geht&rsquo;s &ndash; feiert schön und bleibt hydriert!</footer>
+
+  </div>
+</body>
+</html>
