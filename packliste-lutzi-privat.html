@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Meine Packliste – Ab geht die Lutzi!</title>
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html { background: #14161b; }
+  body { margin: 0; background: #14161b; color: #d4d8df; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "DejaVu Sans", sans-serif; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 480px; margin: 0 auto; padding: 26px 16px calc(40px + env(safe-area-inset-bottom)); }
+
+  .kicker { font-size: 11px; letter-spacing: 1.6px; text-transform: uppercase; color: #ffb454; font-weight: 700; margin: 0 0 7px; }
+  h1 { font-size: 28px; line-height: 1.08; font-weight: 800; color: #f4f6f9; margin: 0 0 8px; letter-spacing: -0.4px; }
+  .meta { font-size: 13px; color: #949aa6; margin: 0; }
+  .hint { display: inline-flex; align-items: center; gap: 6px; margin-top: 14px; font-size: 12px; color: #868c98; border: 1px solid #262a33; border-radius: 999px; padding: 5px 11px; }
+  .hint b { color: #ffb454; font-weight: 700; }
+
+  .progress { margin: 16px 0 0; }
+  .progress .ptop { display: flex; justify-content: space-between; align-items: baseline; font-size: 12px; color: #969ca8; margin: 0 0 6px; letter-spacing: .3px; }
+  .progress .ptop b { color: #ffb454; font-weight: 700; }
+  .progress .bar { height: 7px; background: #21252d; border-radius: 99px; overflow: hidden; }
+  .progress .fill { height: 100%; width: 0%; background: #ffb454; border-radius: 99px; transition: width .25s ease; }
+
+  .alert { border-radius: 14px; padding: 13px 15px; margin: 16px 0 0; font-size: 14px; line-height: 1.5; }
+  .alert .lbl { display: block; font-weight: 800; letter-spacing: 0.5px; font-size: 11px; text-transform: uppercase; margin: 0 0 4px; }
+  .alert.heat { background: #241d12; border: 1px solid #3a2e18; color: #ecdcc6; }
+  .alert.heat .lbl { color: #ffb454; }
+  .alert strong { color: #ffffff; font-weight: 700; }
+
+  .card { background: #1b1e24; border: 1px solid #262a33; border-radius: 14px; padding: 13px 16px 9px; margin: 12px 0 0; }
+  .card > h2 { display: flex; align-items: center; gap: 10px; font-size: 12.5px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; color: #e7eaef; margin: 0 0 6px; }
+  .card > h2::before { content: ""; width: 4px; height: 15px; border-radius: 2px; background: #ffb454; flex: 0 0 4px; }
+  .card > h2 .sub { font-weight: 600; letter-spacing: 0; text-transform: none; color: #969ca8; }
+
+  .row { display: flex; align-items: flex-start; gap: 12px; padding: 8px 0; cursor: pointer; }
+  .row + .row { border-top: 1px solid #21252d; }
+  .row input { appearance: none; -webkit-appearance: none; width: 21px; height: 21px; flex: 0 0 21px; margin: 1px 0 0; border: 2px solid #555b68; border-radius: 6px; background: #15181e; position: relative; cursor: pointer; transition: background .12s, border-color .12s; }
+  .row input:checked { background: #ffb454; border-color: #ffb454; }
+  .row input:checked::after { content: ""; position: absolute; left: 6px; top: 2px; width: 5px; height: 10px; border: solid #14161b; border-width: 0 2.5px 2.5px 0; transform: rotate(45deg); }
+  .row input:focus-visible { outline: 2px solid #ffb454; outline-offset: 2px; }
+  .row .tx { flex: 1; font-size: 15px; line-height: 1.45; }
+  .row .tx strong { color: #ffffff; font-weight: 700; }
+  .row .tx .q { color: #949aa6; }
+  .row input:checked ~ .tx { color: #767c88; text-decoration: line-through; text-decoration-color: #4a4f5a; }
+  .row input:checked ~ .tx strong { color: #767c88; }
+
+  .note { padding: 2px 0 6px 33px; margin-top: -4px; color: #949aa6; font-size: 13px; line-height: 1.4; }
+
+  .info-row { display: flex; gap: 10px; padding: 7px 0; font-size: 14px; line-height: 1.45; }
+  .info-row + .info-row { border-top: 1px solid #21252d; }
+  .info-row::before { content: "•"; color: #ffb454; font-weight: 700; flex: 0 0 auto; }
+  .info-row strong { color: #f0f2f5; font-weight: 700; }
+
+  .reset { display: block; margin: 18px auto 0; background: transparent; border: 1px solid #2c313b; color: #969ca8; font: inherit; font-size: 13px; padding: 9px 18px; border-radius: 99px; cursor: pointer; }
+  .reset:active { background: #1b1e24; }
+
+  footer { text-align: center; color: #ffcf8a; font-weight: 700; font-size: 14px; margin: 22px 6px 0; line-height: 1.4; }
+
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+  <div class="wrap">
+
+    <header>
+      <div class="kicker">Meine Packliste &middot; privat</div>
+      <h1>Ab geht die Lutzi!</h1>
+      <p class="meta">Rottershausen &middot; Do&ndash;So, 25.&ndash;28. Juni 2026 &middot; 3 Nächte</p>
+      <span class="hint"><b>&#10003;</b> Tippen zum Abhaken</span>
+    </header>
+
+    <div class="progress">
+      <div class="ptop"><span>Gepackt</span><span><b id="pcount">0</b> / <span id="ptotal">0</span></span></div>
+      <div class="bar"><div class="fill" id="pfill"></div></div>
+    </div>
+
+    <div class="alert heat">
+      <span class="lbl">&#9728; Das ganze Wochenende heiß</span>
+      Do&ndash;So durchgehend <strong>37&ndash;40&nbsp;&deg;C</strong>, kaum Regen. Viel trinken, eincremen, Schatten suchen. Nachts mild (~18&ndash;20&nbsp;&deg;C).
+    </div>
+
+    <div class="card">
+      <h2>Vorm Einlass checken</h2>
+      <label class="row"><input type="checkbox"><span class="tx">Fürs Gelände nur <strong>eine leere, faltbare Flasche ≤&nbsp;1&nbsp;L</strong> (eigene Drinks/Speisen nur am Camping)</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Gaskartuschen <strong>≤&nbsp;500&nbsp;g</strong> (passt – größere wären verboten)</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Glas erledigt: Apfelwein in Dosen, Berliner Luft in Plastik ✓</span></label>
+    </div>
+
+    <div class="card">
+      <h2>Camp &amp; Aufbau</h2>
+      <label class="row"><input type="checkbox"><span class="tx">Zelt</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Pavillon</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Pavillon-Fixierung / Befestigung</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">2× Spanngurte</span></label>
+      <label class="row"><input type="checkbox"><span class="tx"><strong>Fette Heringe</strong> (stabil – harter, trockener Boden)</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Werkzeug (Hammer für die Heringe etc.)</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Panzertape</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Teppich fürs Vorzelt</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Camping-Tisch</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Camping-Stuhl</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Bollerwagen</span></label>
+    </div>
+
+    <div class="card">
+      <h2>Licht &amp; Strom</h2>
+      <label class="row"><input type="checkbox"><span class="tx">Pavillon-Beleuchtung</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Zelt-Lampe</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Stirnlampe</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Powerbank (fürs Handy)</span></label>
+      <div class="note">Powerstation wird vor Ort geliehen (Flatrate) – keine eigene mitnehmen.</div>
+    </div>
+
+    <div class="card">
+      <h2>Schlafen</h2>
+      <label class="row"><input type="checkbox"><span class="tx">Feldbett</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Wolldecke (als Isolierung <strong>drunter</strong>)</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Normale Bettdecke</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Kopfkissen</span></label>
+    </div>
+
+    <div class="card">
+      <h2>Hitze &amp; Sonne</h2>
+      <label class="row"><input type="checkbox"><span class="tx">Großer Ventilator</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Hand-Ventilator</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Sonnencreme <strong>LSF&nbsp;50+</strong> + Lippenpflege mit LSF</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Cap/Hut + Sonnenbrille</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Regen-/Sonnenschirm <span class="q">(optional?)</span></span></label>
+    </div>
+
+    <div class="card">
+      <h2>Wasser &amp; Abkühlung</h2>
+      <label class="row"><input type="checkbox"><span class="tx">Trinksack</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Trinkflasche + leere faltbare Flasche (≤&nbsp;1&nbsp;L)</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Wasserkanister</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Planschbecken</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">3-Mann-Schleuder (Wasserbomben 💦)</span></label>
+    </div>
+
+    <div class="card">
+      <h2>Küche <span class="sub">(Equipment)</span></h2>
+      <label class="row"><input type="checkbox"><span class="tx">Campingkocher</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Gaskartuschen (<strong>min. 2</strong>, je ≤&nbsp;500&nbsp;g)</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Pfanne</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Kühlbox</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Frenchpress + gemahlener Kaffee</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Teller, Becher, Besteck</span></label>
+      <label class="row"><input type="checkbox"><span class="tx"><strong>Dosenöffner</strong> (für die Ravioli)</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Scharfes Messer, Spülzeug, Müllsäcke</span></label>
+    </div>
+
+    <div class="card">
+      <h2>Essen</h2>
+      <label class="row"><input type="checkbox"><span class="tx">2 Beutel Sloppy Joes (gefroren) – durcherhitzen, Reste evtl. teilen</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">3× Burgerbrötchen</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">2× Chesterkäse</span></label>
+      <div class="note">Brötchen + Käse für die Sloppy-Joe-Burger</div>
+      <label class="row"><input type="checkbox"><span class="tx">3 Dosen Ravioli (Backup)</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Wassereis (gefroren, im Kühler)</span></label>
+    </div>
+
+    <div class="card">
+      <h2>Getränke</h2>
+      <label class="row"><input type="checkbox"><span class="tx">2 Paletten Apfelwein (in Dosen)</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">1 Flasche Berliner Luft (in Plastik umgefüllt)</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">1 Sixpack Eistee Minze</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Wasser/Softdrinks – über die Gruppe gedeckt (trotzdem was am Platz haben)</span></label>
+    </div>
+
+    <div class="card">
+      <h2>Klamotten <span class="sub">(im Wanderrucksack)</span></h2>
+      <label class="row"><input type="checkbox"><span class="tx"><strong>T-Shirts / Tops (8–10)</strong> – du schwitzt viel, ~2–3/Tag</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Kurze Hosen (2–3)</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">1 leichtes Langarm-Shirt</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">1 dünne Jacke / Hoodie für nachts</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Badesachen</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Bequeme, eingelaufene Schuhe + Flip-Flops</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Socken (5–6 Paar)</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Unterwäsche (5–6)</span></label>
+    </div>
+
+    <div class="card">
+      <h2>Hygiene</h2>
+      <label class="row"><input type="checkbox"><span class="tx"><strong>Eigenes Klopapier</strong> + Feuchttücher + Handdesinfektion</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Schnelltrockenhandtuch, Duschgel, Zahnbürste + Zahnpasta, Deo</span></label>
+    </div>
+
+    <div class="card">
+      <h2>Apotheke &amp; Gesundheit</h2>
+      <label class="row"><input type="checkbox"><span class="tx">Ibuprofen</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Elotrans</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Mückenspray + After Bite</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Pflaster + Blasenpflaster</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Gras</span></label>
+    </div>
+
+    <div class="card">
+      <h2>Dokumente, Geld &amp; Technik</h2>
+      <label class="row"><input type="checkbox"><span class="tx"><strong>Ticket</strong> (Handy + Ausdruck/Screenshot)</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Personalausweis</span></label>
+      <label class="row"><input type="checkbox"><span class="tx"><strong>Bargeld</strong> + EC-/Kreditkarte</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Handy + Ladekabel</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Noise-Cancelling In-Ears</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Bauchtasche (TBS-Merch)</span></label>
+      <label class="row"><input type="checkbox"><span class="tx">Kleines Schloss</span></label>
+    </div>
+
+    <div class="card">
+      <h2>Gut zu wissen</h2>
+      <div class="info-row"><span><strong>Awareness / Notfall:</strong> Codewort &bdquo;Ist Luisa da?&ldquo; beim Personal nennen.</span></div>
+      <div class="info-row"><span><strong>Anreise:</strong> Mit dem Auto &ndash; Parken kostenlos direkt am Camping.</span></div>
+    </div>
+
+    <button class="reset" id="resetBtn" type="button">Alle Haken zurücksetzen</button>
+
+    <footer>Auf geht&rsquo;s &ndash; feiert schön und bleibt hydriert!</footer>
+
+  </div>
+
+  <script>
+    (function () {
+      var KEY = 'lutzi-privat-v1';
+      var boxes = Array.prototype.slice.call(document.querySelectorAll('.row input[type=checkbox]'));
+      var pcount = document.getElementById('pcount');
+      var ptotal = document.getElementById('ptotal');
+      var pfill = document.getElementById('pfill');
+      if (ptotal) ptotal.textContent = boxes.length;
+      function load() {
+        try { var raw = localStorage.getItem(KEY); if (!raw) return; var s = JSON.parse(raw); boxes.forEach(function (b, i) { b.checked = !!s[i]; }); } catch (e) {}
+      }
+      function save() {
+        try { localStorage.setItem(KEY, JSON.stringify(boxes.map(function (b) { return b.checked ? 1 : 0; }))); } catch (e) {}
+      }
+      function paint() {
+        var n = boxes.filter(function (b) { return b.checked; }).length;
+        if (pcount) pcount.textContent = n;
+        if (pfill) pfill.style.width = (boxes.length ? (n / boxes.length * 100) : 0) + '%';
+      }
+      boxes.forEach(function (b) { b.addEventListener('change', function () { save(); paint(); }); });
+      var rb = document.getElementById('resetBtn');
+      if (rb) rb.addEventListener('click', function () { boxes.forEach(function (b) { b.checked = false; }); try { localStorage.removeItem(KEY); } catch (e) {} paint(); });
+      load(); paint();
+    })();
+  </script>
+</body>
+</html>
